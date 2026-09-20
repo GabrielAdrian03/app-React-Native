@@ -1,0 +1,63 @@
+import { StyleSheet } from 'react-native';
+import { Colores, Tipografia, Sombras } from '../constants/theme';
+
+export const botonStyles = StyleSheet.create({
+  botonBase: {
+    borderRadius: 10,
+    paddingVertical: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  botonNormal: {
+    backgroundColor: Colores.primario,
+  },
+  botonPeligro: {
+    borderColor: Colores.peligro,
+    borderWidth: 1,
+    backgroundColor: 'transparent',
+  },
+  textoBase: {
+    ...Tipografia.subtitulo,
+  },
+  textoNormal: {
+    color: Colores.blanco,
+  },
+  textoPeligro: {
+    color: Colores.peligro,
+  },
+});
+
+export const cardStyles = StyleSheet.create({
+  tarjeta: {
+    backgroundColor: Colores.blanco,
+    borderRadius: 12,
+    flexDirection: 'row',
+    marginBottom: 16,
+    overflow: 'hidden',
+    ...Sombras.suave,
+  },
+  imagen: {
+    width: 110,
+    height: 110,
+  },
+  contenedorInfo: {
+    flex: 1,
+    padding: 12,
+    justifyContent: 'space-between',
+  },
+  titulo: {
+    ...Tipografia.subtitulo,
+    color: Colores.textoPrincipal,
+  },
+  precio: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: Colores.primario,
+    marginVertical: 4,
+  },
+  descripcion: {
+    ...Tipografia.detalle,
+    color: Colores.textoSecundario,
+  },
+});
