@@ -4,18 +4,27 @@ import { botonStyles as styles } from '../styles/componentStyles';
 export default function PrimaryButton({ titulo, onPress, tipo = 'principal', estiloCustom }) {
   // Definimos estilos dinámicos según el tipo de botón
   const esPeligro = tipo === 'peligro';
+  const esFavorito = tipo === 'favoritos';
   
+  let estiloTipoBoton = styles.botonNormal;
+  if (esPeligro) estiloTipoBoton = styles.botonPeligro;
+  if (esFavorito) estiloTipoBoton = styles.botonFavorito;
+
+let estiloTipoTexto = styles.textoNormal;
+  if (esPeligro) estiloTipoTexto = styles.textoPeligro;
+  if (esFavorito) estiloTipoTexto = styles.textoFavorito;
+
   return (
     <TouchableOpacity 
       style={[
         styles.botonBase, 
-        esPeligro ? styles.botonPeligro : styles.botonNormal,
+        estiloTipoBoton,
         estiloCustom //pasa márgenes o anchos específicos
       ]} 
       onPress={onPress} 
       activeOpacity={0.8}
     >
-      <Text style={[styles.textoBase, esPeligro ? styles.textoPeligro : styles.textoNormal]}>
+      <Text style={[styles.textoBase, estiloTipoTexto]}>
         {titulo}
       </Text>
     </TouchableOpacity>

@@ -164,3 +164,31 @@ export const favoritosStyles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export const localStyles = StyleSheet.create({
+  fondoModal: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.95)', // Fondo negro con 95% de opacidad
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  contenedorCerrar: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    zIndex: 10,
+  },
+  textoCerrar: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: 'bold',
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+  },
+  imagenPantallaCompleta: {
+    width: '100%',
+    height: '80%',
+  },
+});

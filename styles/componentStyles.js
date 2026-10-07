@@ -26,6 +26,15 @@ export const botonStyles = StyleSheet.create({
   textoPeligro: {
     color: Colores.peligro,
   },
+  botonFavorito: {
+    backgroundColor: '#e7f5ff',
+    borderWidth: 1,
+    borderColor: '#d0ebff',
+  },
+  textoFavorito: {
+    color: '#0070f3',
+    fontWeight: '600',
+  },
 });
 
 export const cardStyles = StyleSheet.create({

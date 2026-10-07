@@ -4,8 +4,9 @@ import { SafeAreaView } from 'react-native-safe-area-context'; // Safe Area mode
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import PrimaryButton from '../../components/PrimaryButton';
 import { misProductos } from '../../data/products';
-import { productDetailStyles as styles } from '../../styles/screenStyles';
+import { productDetailStyles as styles, localStyles } from '../../styles/screenStyles';
 import { cartStore } from '../../data/cartStore';
+import { useFavoritos } from '../../hooks/useFavoritos'; // Importamos el hook personalizado
 
 export default function DetalleProductoScreen() {
   const params = useLocalSearchParams();
@@ -17,6 +18,8 @@ export default function DetalleProductoScreen() {
 
   //se busca el producto solo si el ID existe y es válido
   const producto = id ? misProductos.find((p) => p.id === parseInt(id, 10)) : null;
+
+  const { esFavorito, toggleFavorito } = useFavoritos(id, producto); // Usamos el hook para manejar favoritos
 
   //Si no hay producto frena el renderizado
   if (!producto) {
@@ -47,13 +50,22 @@ export default function DetalleProductoScreen() {
           <View style={styles.divisor} />
           <Text style={styles.subtitulo}>Descripción</Text>
           <Text style={styles.descripcion}>{producto.descripcion}</Text>
+
           <PrimaryButton titulo="Agregar al Carrito" 
           onPress={() => {
             cartStore.agregarProducto(producto); 
           alert(`Se agregó ${producto.titulo} al carrito!`)}} />
+
+          <PrimaryButton
+            titulo={esFavorito ? 'Quitar de Favoritos' : 'Agregar a Favoritos'}
+            tipo="favoritos"
+            onPress={toggleFavorito}
+            estiloCustom={{ marginTop: 12}}
+          />
+
         </View>
       </ScrollView>
-      
+
         {/* Modal para ver la imagen en grande */}
         <Modal 
           visible={modalVisible}
@@ -78,31 +90,3 @@ export default function DetalleProductoScreen() {
     </SafeAreaView>
   );
 }
-
-const localStyles = StyleSheet.create({
-  fondoModal: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.95)', // Fondo negro con 95% de opacidad
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  contenedorCerrar: {
-    position: 'absolute',
-    top: 20,
-    right: 20,
-    zIndex: 10,
-  },
-  textoCerrar: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: 'bold',
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-  },
-  imagenPantallaCompleta: {
-    width: '100%',
-    height: '80%',
-  },
-});
