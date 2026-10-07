@@ -37,7 +37,7 @@ export default function PerfilScreen() {
         <View style={styles.tarjetaUsuario}>
           <View style={styles.avatarSimulado}><Text style={styles.textoAvatar}>C</Text></View>
           <View style={styles.infoUsuario}>
-            <Text style={styles.nombre}>Cirujano Dev</Text>
+            <Text style={styles.nombre}>Cirujano</Text>
             <Text style={styles.email}>cirujano@ejemplo.com</Text>
           </View>
         </View>

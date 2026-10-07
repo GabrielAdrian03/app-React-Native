@@ -12,10 +12,10 @@ export default function DetalleProductoScreen() {
   const router = useRouter();
   const [modalVisible, setModalVisible] = useState(false);
   
-  // 1. Nos aseguramos de extraer el id de forma segura
+  //extrae el id de forma segura
   const id = params?.id;
 
-  // 2. Buscamos el producto SOLO si el ID existe y es válido
+  //se busca el producto solo si el ID existe y es válido
   const producto = id ? misProductos.find((p) => p.id === parseInt(id, 10)) : null;
 
   //Si no hay producto frena el renderizado
@@ -32,7 +32,7 @@ export default function DetalleProductoScreen() {
     );
   }
 
-  // 4. Si el código llega acá, está 100% garantizado que 'producto' tiene datos
+  //Si el código llega acá es por que 'producto' tiene datos
   return (
     <SafeAreaView style={styles.contenedorGlobal}>
       <ScrollView contentContainerStyle={styles.scrollContenedor} showsVerticalScrollIndicator={false}>
@@ -53,6 +53,7 @@ export default function DetalleProductoScreen() {
           alert(`Se agregó ${producto.titulo} al carrito!`)}} />
         </View>
       </ScrollView>
+      
         {/* Modal para ver la imagen en grande */}
         <Modal 
           visible={modalVisible}
@@ -63,6 +64,7 @@ export default function DetalleProductoScreen() {
             style={localStyles.fondoModal} 
             activeOpacity={1}
             onPress={() => setModalVisible(false)}>
+
             {/* Boton para cerrar */}
             <SafeAreaView style={localStyles.contenedorCerrar}>
                 <Text style={localStyles.textoCerrar}>Cerrar</Text>

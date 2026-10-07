@@ -1,7 +1,7 @@
 import * as SecureStore from 'expo-secure-store';
 
 export const authStore = {
-  // Guarda el token en el chip seguro del teléfono
+  // Guarda el token en el local seguro del teléfono
   guardarToken: async (token) => {
     try {
       await SecureStore.setItemAsync('user_session_token', token);

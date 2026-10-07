@@ -1,7 +1,11 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { Text, View, Image, TouchableOpacity } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { cardStyles as styles } from '../styles/componentStyles';
+import { useFavoritos } from '../hooks/useFavoritos';
 
 export default function ProductCard({ producto, onPress }) {
+  const { esFavorito, toggleFavorito } = useFavoritos(producto.id, producto);
+
   return (
     <TouchableOpacity style={styles.tarjeta} onPress={onPress} activeOpacity={0.7}>
       <Image 
@@ -20,6 +24,18 @@ export default function ProductCard({ producto, onPress }) {
           {producto.descripcion}
         </Text>
       </View>
+
+      {/* Botón de favorito */}
+      <TouchableOpacity 
+        style={styles.botonFavorito} 
+        onPress={toggleFavorito}
+        activeOpacity={0.7}>
+        <FontAwesome 
+          name={esFavorito ? 'star' : 'star-o'} 
+          size={24} 
+          color={esFavorito ? '#FFD700' : '#999'} 
+        />
+      </TouchableOpacity>
     </TouchableOpacity>
   );
 }

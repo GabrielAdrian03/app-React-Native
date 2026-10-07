@@ -1,10 +1,10 @@
-# 🛒 Mi Tiendita App (React Native + Expo Router)
+# Mi Tiendita (React Native + Expo Router)
 
 ¡Hola! Esta es una aplicación móvil de catálogo y carrito de compras armada con **Expo (SDK 57)**. Toda la navegación se maneja de forma automática mediante carpetas y archivos gracias a **Expo Router**.
 
 ---
 
-## 📁 ¿Cómo está organizado el proyecto? (Para no perderse)
+## Organización
 
 El cerebro de la app está en la carpeta `app/`. Cada archivo o carpeta adentro se convierte en una pantalla del celular de manera mágica:
 
@@ -17,7 +17,7 @@ El cerebro de la app está en la carpeta `app/`. Cada archivo o carpeta adentro 
     *   `perfil.jsx`: Tu perfil, donde además pusimos el **Carrito de Compras** en vivo y el botón de cerrar sesión.
 *   **`app/producto/[id].jsx`**: Los corchetes significan "Ruta Dinámica". Es una sola pantalla que se adapta al producto que toques (ej: `/producto/1`, `/producto/2`). Abre a pantalla completa tapando la barra de abajo.
 
-### 📦 Otras carpetas importantes:
+### Otras carpetas importantes:
 *   `components/`: Botones y tarjetas reutilizables (para no escribir el mismo código mil veces).
 *   `constants/Theme.js`: El tarro de pintura de la app. Si cambiás un color acá, cambia en toda la app de golpe.
 *   `styles/`: Archivos sueltos de diseño para que las pantallas no tengan 500 líneas de código visual.
@@ -25,7 +25,7 @@ El cerebro de la app está en la carpeta `app/`. Cada archivo o carpeta adentro 
 
 ---
 
-## 🧠 ¿Cómo funciona la "Magia" por detrás?
+## ¿Cómo funciona?
 
 ### 1. El Carrito en Vivo (`data/cartStore.js`)
 No usamos librerías raras. Es un archivo de JavaScript simple que guarda tu lista de compras en una variable. Cuando tocás "Agregar al Carrito", el archivo le suma 1 al producto y le pega un grito a la pantalla de Perfil para que se actualice sola en tiempo real.
@@ -33,12 +33,12 @@ No usamos librerías raras. Es un archivo de JavaScript simple que guarda tu lis
 ### 2. Guardar la Sesión (`data/authStore.js`)
 Usamos `expo-secure-store`. Cuando ponés la clave bien, la app guarda un "Token" (un pase libre) adentro del chip seguro de tu celular. Si cerrás la app y la volvés a abrir, la raíz lee ese chip, ve que el pase sigue ahí y entrás directo sin escribir la contraseña.
 
-### 3. El Grito Global de Cerrar Sesión
+### 3 Cerrar Sesión
 Cuando tocás "Cerrar Sesión" en el perfil, la app usa una herramienta nativa (`DeviceEventEmitter`) para mandarle una alerta a la raíz. La raíz la escucha, borra el token del chip y te manda instantáneamente al Login, bloqueando el resto de las pantallas.
 
 ---
 
-## 🛠️ Cómo arrancar el proyecto en tu PC
+## Cómo arrancar el proyecto
 
 Si te bajás este código en otra computadora o querés levantarlo de cero:
 

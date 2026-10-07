@@ -10,12 +10,8 @@ export const globalScreenStyles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     paddingTop: 10,
-  },
-  tituloPantalla: {
-    ...Tipografia.tituloMedio,
-    marginBottom: 16,
-    color: Colores.textoPrincipal,
-  },
+    paddingBottom: 80,
+  }
 });
 
 export const productDetailStyles = StyleSheet.create({

@@ -12,7 +12,7 @@ export default function LoginScreen({ onLoginExitoso }) {
   const manejarLogin = async () => {
 
     if (!usuario.trim() || !contrasenia.trim()) {
-      Alert.alert("Error", "Por favor, completá todos los campos.");
+      Alert.alert("Error", "Completá todos los campos.");
       return;
     }
 
@@ -21,7 +21,7 @@ export default function LoginScreen({ onLoginExitoso }) {
         await authStore.guardarToken('token-secreto-123'); // Guardamos el estado de login
         onLoginExitoso();
     } else {
-      Alert.alert("Error", "Usuario o contraseña incorrectos.\n(mandale admin / 1234 guacho)");
+      Alert.alert("Usuario o contraseña incorrecto.\n(mandale admin / 1234 guacho)");
     }
   };
 

@@ -1,13 +1,33 @@
-import { SafeAreaView } from 'react-native-safe-area-context'; // 👈 EL CORRECTO
+import React, {useState} from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, FlatList } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
+import asyncStorage from '@react-native-async-storage/async-storage';
 import ProductCard from '../../components/ProductCard';
-import { misProductos } from '../../data/products';
 import { globalScreenStyles, favoritosStyles } from '../../styles/screenStyles';
 
 export default function FavoritosScreen() {
   const router = useRouter();
-  const productosFavoritos = misProductos.filter(p => p.id === 1 || p.id === 3);
+  const [productosFavoritos, setProductosFavoritos] = useState([]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const cargarFavoritos = async () => {
+        try {
+          const favoritosGuardados = await asyncStorage.getItem('favoritos');
+          if (favoritosGuardados) {
+            setProductosFavoritos(JSON.parse(favoritosGuardados));
+          } else {
+            setProductosFavoritos([]);
+          }
+        } catch (error) {
+          console.error('Error al cargar los favoritos:', error);
+        }
+      };
+
+      cargarFavoritos();
+    }, [])
+  );
 
   return (
     <SafeAreaView style={globalScreenStyles.contenedorGlobal}>

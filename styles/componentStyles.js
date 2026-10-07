@@ -33,6 +33,8 @@ export const cardStyles = StyleSheet.create({
     backgroundColor: Colores.blanco,
     borderRadius: 12,
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: 16,
     overflow: 'hidden',
     ...Sombras.suave,
@@ -40,12 +42,19 @@ export const cardStyles = StyleSheet.create({
   imagen: {
     width: 110,
     height: 110,
+    borderRadius: 12,
   },
   contenedorInfo: {
     flex: 1,
-    padding: 12,
+    paddingHorizontal: 12,
     justifyContent: 'space-between',
   },
+  botonFavorito: {
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
   titulo: {
     ...Tipografia.subtitulo,
     color: Colores.textoPrincipal,
