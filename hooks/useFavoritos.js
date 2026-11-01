@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 const CLAVE_FAVORITOS = 'favoritos';
 const suscriptores = new Set();

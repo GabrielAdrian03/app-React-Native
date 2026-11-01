@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { Colores, Tipografia, Sombras } from '../constants/theme';
+import { Colores, Sombras, Tipografia } from '../constants/theme';
 
 export const botonStyles = StyleSheet.create({
   botonBase: {
@@ -44,20 +44,31 @@ export const cardStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 16,
+    width: 330,
     overflow: 'hidden',
     ...Sombras.suave,
   },
+
+  contenido: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    minWidth: 0,
+  },
+
   imagen: {
     width: 110,
     height: 110,
     borderRadius: 12,
   },
+
   contenedorInfo: {
     flex: 1,
+    minWidth: 0,
     paddingHorizontal: 12,
     justifyContent: 'space-between',
   },
+
   botonFavorito: {
     padding: 10,
     justifyContent: 'center',
@@ -68,12 +79,14 @@ export const cardStyles = StyleSheet.create({
     ...Tipografia.subtitulo,
     color: Colores.textoPrincipal,
   },
+
   precio: {
     fontSize: 18,
     fontWeight: 'bold',
     color: Colores.primario,
     marginVertical: 4,
   },
+
   descripcion: {
     ...Tipografia.detalle,
     color: Colores.textoSecundario,

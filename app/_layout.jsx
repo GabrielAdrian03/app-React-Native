@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, DeviceEventEmitter, View } from 'react-native'; // 👈 Importamos DeviceEventEmitter
+import { ActivityIndicator, DeviceEventEmitter, View } from 'react-native';
 import { authStore } from '../data/authStore';
 import LoginScreen from './login';
 

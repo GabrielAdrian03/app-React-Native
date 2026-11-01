@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import { Stack, useRouter } from 'expo-router';
+import { useCallback, useEffect, useState } from 'react';
+import { ActivityIndicator, FlatList, Image, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, Image, FlatList, Text, ActivityIndicator } from 'react-native';
-import { useRouter, Stack } from 'expo-router'; 
+import PrimaryButton from "../../components/PrimaryButton";
 import ProductCard from '../../components/ProductCard';
-import PrimaryButton from "../../components/PrimaryButton"
-import { globalScreenStyles as styles, localStyles } from '../../styles/screenStyles';
+import { localStyles, globalScreenStyles as styles } from '../../styles/screenStyles';
 
 
 export default function InicioScreen() {
@@ -89,6 +89,8 @@ export default function InicioScreen() {
             onPress={() => router.push(`/producto/${item.id}`)} />
           )}
           showsVerticalScrollIndicator={false}
+
+          ItemSeparatorComponent={() => <View style={{ height: 16 }} />} 
           ListHeaderComponent={
             <View>
               {/* Banner */}

@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Tabs } from 'expo-router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Colores } from '../../constants/theme';
@@ -42,13 +43,26 @@ export default function TabsLayout() {
               ),
             }}
           />
+          
+          <Tabs.Screen
+              name="prueba-drag"
+              options={{
+                title: 'Prueba',
+                tabBarIcon: ({ color, size }) => (
+                  <MaterialCommunityIcons
+                    name="drag"
+                    size={size}
+                    color={color}
+                  />
+                ),
+              }}
+            />
 
           {/* FAVORITOS */}
           <Tabs.Screen
             name="favoritos"
             options={{
               title: 'Favoritos',
-              headerShown: false,
               tabBarIcon: ({ color, focused }) => (
                 <Ionicons 
                   name={focused ? 'heart' : 'heart-outline'} 

@@ -1,25 +1,22 @@
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Stack, useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useState } from 'react';
 import {
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import DraggableFlatList, {
-  ScaleDecorator,
-} from 'react-native-draggable-flatlist';
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
-//maneja la animación del Swipe
-import Animated, { useAnimatedStyle } from 'react-native-reanimated';
+import Sortable from 'react-native-sortables';
 
 import ProductCard from '../../components/ProductCard';
 import { guardarFavoritos } from '../../hooks/useFavoritos';
+
 import {
   favoritosStyles,
   globalScreenStyles,
@@ -27,7 +24,7 @@ import {
 
 export default function FavoritosScreen() {
   const router = useRouter();
-  const [productosFavoritos, setProductosFavoritos] = useState([]);
+  const [favorites, setFavorites] = useState([]);
 
   // Cargar favoritos
   useFocusEffect(
@@ -36,19 +33,15 @@ export default function FavoritosScreen() {
 
       const cargarFavoritos = async () => {
         try {
-          const favoritosGuardados = await AsyncStorage.getItem('favoritos');
+          const guardados = await AsyncStorage.getItem('favoritos');
 
           if (!activo) return;
 
-          const favoritos = favoritosGuardados
-            ? JSON.parse(favoritosGuardados)
-            : [];
+          const productos = guardados ? JSON.parse(guardados) : [];
 
-          setProductosFavoritos(
-            Array.isArray(favoritos) ? favoritos : []
-          );
+          setFavorites(Array.isArray(productos) ? productos : []);
         } catch (error) {
-          console.error('Error al recuperar favoritos:', error);
+          console.error('Error al cargar favoritos:', error);
         }
       };
 
@@ -60,61 +53,35 @@ export default function FavoritosScreen() {
     }, [])
   );
 
-  // Guardar el nuevo orden
-  const guardarNuevoOrden = async (nuevaLista) => {
-    setProductosFavoritos(nuevaLista);
+  // Guardar nuevo orden
+  const handleDragEnd = async ({ order }) => {
+    const nuevoOrden = order(favorites);
+
+    setFavorites(nuevoOrden);
 
     try {
-      await guardarFavoritos(nuevaLista);
+      await guardarFavoritos(nuevoOrden);
     } catch (error) {
       console.error('Error al guardar el orden:', error);
     }
   };
 
-  // Eliminar producto de favoritos
-  const eliminarFavorito = async (idAEliminar) => {
-    const listaActualizada = productosFavoritos.filter(
-      (item) => String(item.id) !== String(idAEliminar)
+  // Eliminar favorito
+  const quitarFavoritoDeLaLista = async (id) => {
+    const actualizados = favorites.filter(
+      item => String(item.id) !== String(id)
     );
 
-    setProductosFavoritos(listaActualizada);
+    setFavorites(actualizados);
 
     try {
-      await guardarFavoritos(listaActualizada);
+      await guardarFavoritos(actualizados);
     } catch (error) {
       console.error('Error al eliminar favorito:', error);
     }
   };
 
-  const quitarFavoritoDeLaLista = (idAEliminar) => {
-    setProductosFavoritos((favoritos) =>
-      favoritos.filter((item) => String(item.id) !== String(idAEliminar))
-    );
-  };
-
-  const renderRightActions = (id, progress, dragX) => {
-    const styleAnimado = useAnimatedStyle(() => {
-      // Reanimated utiliza su propia lógica de interpolación interna
-      const scale = dragX.value < -80 ? 1 : Math.max(0, (dragX.value + 80) / 80);
-      return {
-        transform: [{ scale }],
-      };
-    });
-
-    return (
-      <TouchableOpacity
-        style={localStyles.botonEliminarSwipe}
-        onPress={() => eliminarFavorito(id)}
-        activeOpacity={0.8}
-      >
-        <Animated.View style={styleAnimado}>
-          <FontAwesome name="trash" size={24} color="#fff" />
-        </Animated.View>
-      </TouchableOpacity>
-    );
-  };
-
-  // Formatear producto
+  // Normalizar producto
   const formatearProducto = (item) => ({
     id: item.id,
     titulo: item.titulo || item.title || 'Producto sin título',
@@ -123,101 +90,155 @@ export default function FavoritosScreen() {
     imagen: item.imagen || item.image || '',
   });
 
-  // Renderizar tarjetas
-  const renderItem = ({ item, drag, isActive }) => {
-    const producto = formatearProducto(item);
-
+  // Acción que aparece al deslizar
+  const renderRightActions = (producto) => {
     return (
-      <ScaleDecorator>
-        <Swipeable
-          // Se invierte el orden para asegurar que las animaciones lean los SharedValues correctos.
-          renderRightActions={(dragX, progress) =>
-            renderRightActions(producto.id, progress, dragX)
-          }
-          enabled={!isActive}
-          rightThreshold={40}
-        >
-          <TouchableOpacity
-            onLongPress={drag}
-            delayLongPress={250}
-            disabled={isActive}
-            activeOpacity={0.9}
-          >
-            <View style={[
-              { backgroundColor: '#fff' },
-              isActive && {
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 5 },
-                shadowOpacity: 0.34,
-                shadowRadius: 6.27,
-                elevation: 10,
-                opacity: 0.9
-              }
-            ]}>
-              <ProductCard
-                producto={producto}
-                onPress={() =>
-                  router.push(`/producto/${producto.id}`)
-                }
-                onToggleFavoritoCallback={() =>
-                  quitarFavoritoDeLaLista(producto.id)
-                }
-              />
-            </View>
-          </TouchableOpacity>
-        </Swipeable>
-      </ScaleDecorator>
+      <TouchableOpacity
+        style={styles.botonEliminar}
+        onPress={() => quitarFavoritoDeLaLista(producto.id)}
+        activeOpacity={0.8}
+      >
+        <MaterialCommunityIcons
+          name="trash-can-outline"
+          size={26}
+          color="#fff"
+        />
+
+        <Text style={styles.textoEliminar}>
+          Eliminar
+        </Text>
+      </TouchableOpacity>
     );
   };
 
   return (
     <SafeAreaView style={globalScreenStyles.contenedorGlobal}>
+            <Stack.Screen 
+              options={{
+                headerShown: true,
+                title: 'Favoritos',
+                headerTitleAlign: 'center',
+                headerStyle: { backgroundColor: '#3a04fc' },
+                headerTintColor: '#fff',
+              }} 
+            />
       <View style={globalScreenStyles.contenedorContenido}>
 
-        <Text style={globalScreenStyles.tituloPantalla}>
-          Mis Favoritos
-        </Text>
 
-        {productosFavoritos.length === 0 ? (
+        {favorites.length === 0 ? (
           <View style={favoritosStyles.contenedorVacio}>
             <Text style={favoritosStyles.textoVacio}>
               No tenés productos guardados aún.
             </Text>
           </View>
         ) : (
-          <DraggableFlatList
-            data={productosFavoritos}
-            keyExtractor={(item) => `favorito-id-${item.id}`}
-            renderItem={renderItem}
-            onDragEnd={({ data }) => guardarNuevoOrden(data)}
+          <ScrollView
             showsVerticalScrollIndicator={false}
-            activationDistance={20}
-            delayLongPress={200}
-            containerStyle={{ flex: 1 }}
-          />
-        )}
+            contentContainerStyle={styles.contenedorLista}
+          >
+            <Sortable.Flex
+              flexDirection="column"
+              flexWrap="nowrap"
+              alignItems="stretch"
+              gap={16}
+              dragActivationDelay={250}
+              activeItemScale={1.02}
+              activeItemOpacity={0.9}
+              onDragEnd={handleDragEnd}
+            >
+              {favorites.map((item) => {
+                const producto = formatearProducto(item);
 
+                return (
+                  <View
+                    key={String(item.id)}
+                    style={styles.filaProducto}
+                  >
+                    <Swipeable
+                      renderRightActions={() =>
+                        renderRightActions(producto)
+                      }
+                      rightThreshold={40}
+                      overshootRight={false}
+                      friction={2}
+                    >
+                      <View style={styles.contenidoTarjeta}>
+                        <View style={styles.iconoArrastre}>
+                          <MaterialCommunityIcons
+                            name="drag-vertical"
+                            size={30}
+                            color="#777"
+                          />
+                        </View>
+
+                        <View style={styles.tarjetaProducto}>
+                          <ProductCard
+                            producto={producto}
+                            onPress={() =>
+                              router.push(`/producto/${producto.id}`)
+                            }
+                            onToggleFavoritoCallback={() =>
+                              quitarFavoritoDeLaLista(producto.id)
+                            }
+                          />
+                        </View>
+                      </View>
+                    </Swipeable>
+                  </View>
+                );
+              })}
+            </Sortable.Flex>
+          </ScrollView>
+        )}
       </View>
     </SafeAreaView>
   );
 }
 
-const localStyles = StyleSheet.create({
-  textoInstruccion: {
-    fontSize: 12,
-    color: '#888',
-    textAlign: 'center',
-    marginBottom: 10,
-    fontStyle: 'italic',
+const styles = StyleSheet.create({
+  contenedorLista: {
+    paddingBottom: 20,
   },
 
-  botonEliminarSwipe: {
-    backgroundColor: '#dc3545',
+  filaProducto: {
+    width: '100%',
+    minWidth: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
+  contenidoTarjeta: {
+    width: '100%',
+    minWidth: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 12,
+  },
+
+  iconoArrastre: {
+    width: 42,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  tarjetaProducto: {
+    flex: 1,
+    minWidth: 0,
+  },
+
+  botonEliminar: {
+    width: 90,
+    backgroundColor: '#FF3B30',
     justifyContent: 'center',
     alignItems: 'center',
-    width: 80,
-    height: '84%',
-    borderRadius: 8,
-    marginBottom: 12,
+    borderRadius: 12,
+  },
+
+  textoEliminar: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '600',
+    marginTop: 4,
   },
 });

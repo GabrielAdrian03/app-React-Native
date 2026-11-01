@@ -1,13 +1,16 @@
-import { StyleSheet, 
-  View, 
-  Text, 
-  Image, 
-  Pressable, 
-  Alert, 
-  Platform, 
-  ScrollView 
+import {
+  Alert,
+  Image,
+  LogBox,
+  Pressable,
+  ScrollView,
+  Text,
+  View
 } from 'react-native';
 import { styles } from "./styles/screenStyles";
+
+// Silenciar la advertencia ruidosa de Reanimated
+LogBox.ignoreLogs(['[Reanimated] Dependencies should only be used on the web']);
 
 
 
